@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 
-def proc(xs, n):
+def proc(xs, n, add=False):
     """Process newline delimited string into list of lists of integers.
     Return sorted list of two item tuples, take N largeset
     [(calories:int, index:int)]
     """
-    idx = 0
-    vals = []
-    ret = []
-    for i in xs.split("\n"):
-        if i == "":
-            idx += 1
-            ret.append((sum(vals), idx))
-            vals = []
-        else:
-            vals.append(int(i))
-    return sorted(ret, reverse=True)[:n]
+    xs = xs[:-1]
+    val = [(sum(int(j) for j in i.split("\n")), k+1) for k, i in enumerate(xs.split("\n\n"))]
+    val = sorted(val, reverse=True)[:n]
+    if add:
+        return sum(i for i, _ in val)
+    else:
+        return val[:n]
 
 
 def get_data(fname):
@@ -31,10 +27,7 @@ if __name__ == "__main__":
     data = get_data("input/day1_input.txt")
 
     # Find the top 3 elves with the most calories
-    elves = proc(data, 3)
+    print("Top 3 elves:", proc(data, 3))
 
-    # Display those results
-    _ = [print(f"{i} calories, ({j})") for i, j in elves]
-
-    # Total up the results from the top three elves
-    print(sum((i for i, _ in elves)), "calories total")
+    # compute total of top 3
+    print("total:", proc(data, 3, True), "calories")
