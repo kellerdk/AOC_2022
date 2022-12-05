@@ -1,22 +1,40 @@
 #t!/usr/bin/env python3
 
+"""AOC 2022 - Day 4
+"""
+
+
 def get_data(fname):
-    with open(fname) as fp:
-        return fp.read().split("\n")[:-1]
+    """Get data from file
+    """
+    with open(fname, encoding="uft-8") as fptr:
+        return fptr.read().split("\n")[:-1]
 
-def to_range(xs):
-    x0, x1 = xs.split("-")
-    return set(range(int(x0), int(x1)+1))
 
-def superset(x1, x2):
-    u, v = to_range(x1), to_range(x2)
-    return u.issubset(v) | v.issubset(u)
+def to_range(xss):
+    """Transform string dash seperated range to python range
+    """
+    xx0, xx1 = xss.split("-")
+    return set(range(int(xx0), int(xx1)+1))
 
-def subset(x1, x2):
-    return to_range(x1) & to_range(x2) != set()
 
-def overlap_with(xs, f):
-    return sum((f(*i.split(","))) for i in xs if True)
+def superset(xx1, xx2):
+    """Determine if either argumented is a superset of the other
+    """
+    uuu, vvv = to_range(xx1), to_range(xx2)
+    return uuu.issubset(vvv) | vvv.issubset(uuu)
+
+
+def subset(xx1, xx2):
+    """Determine intersection of the arguments
+    """
+    return to_range(xx1) & to_range(xx2) != set()
+
+
+def overlap_with(xss, fun):
+    """Calculate number of items satisfed by function, f
+    """
+    return sum((fun(*i.split(","))) for i in xss if i)
 
 
 if __name__ == "__main__":
