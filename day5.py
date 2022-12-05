@@ -27,17 +27,17 @@ def crates():
     [L] [C] [W] [C] [P] [T] [M] [Z] [W]
      1   2   3   4   5   6   7   8   9
      """
-    cd = {}
-    cd[1] = 'DTWNL'
-    cd[2] = 'HPC'
-    cd[3] = 'JMGDNHPW'
-    cd[4] = 'LQTNSWC'
-    cd[5] = 'NCHP'
-    cd[6] = 'BQWMDNHT'
-    cd[7] = 'LSGJRBM'
-    cd[8] = 'TRBVGWNZ'
-    cd[9] = 'LPNDGW'
-    return {k: list(v) for k, v in cd.items()}
+    cdx = {}
+    cdx[1] = 'DTWNL'
+    cdx[2] = 'HPC'
+    cdx[3] = 'JMGDNHPW'
+    cdx[4] = 'LQTNSWC'
+    cdx[5] = 'NCHP'
+    cdx[6] = 'BQWMDNHT'
+    cdx[7] = 'LSGJRBM'
+    cdx[8] = 'TRBVGWNZ'
+    cdx[9] = 'LPNDGW'
+    return {k: list(v) for k, v in cdx.items()}
 
 
 def move_crates(state, moves):
@@ -63,20 +63,22 @@ def report_state(state):
     return "".join(v[0] for v in state.values())
 
 
-def parse_move(xs):
+def parse_move(xss):
     """Move description in the form:  (quantity, source, destination)
     """
-    return [int(i) for i in repat.findall(xs)]
+    return [int(i) for i in repat.findall(xss)]
 
 
-def parse_moves(xs):
-    moves = [parse_move(i) for i in xs]
+def parse_moves(xss):
+    """Parse move list
+    """
+    moves = [parse_move(i) for i in xss]
     return [i for i in moves if i]
 
 
 if __name__ == "__main__":
-    moves = get_data("input/day5_input.txt")[9:]
-    m = parse_moves(moves)
+    directions = get_data("input/day5_input.txt")[9:]
+    m = parse_moves(directions)
 
     for apply in [move_crates, move_stack]:
         s = crates()
