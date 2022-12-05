@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 
+""" AOC 2022 - Day 5
+"""
+
 import re
 
 repat = re.compile(r"\d+")
 
 
 def get_data(fname):
+    """Get data from input file
+    """
     with open(fname, encoding="utf-8") as fptr:
         return fptr.read().split("\n")[:-1]
+
 
 def crates():
     """
@@ -31,57 +37,48 @@ def crates():
     cd[7] = 'LSGJRBM'
     cd[8] = 'TRBVGWNZ'
     cd[9] = 'LPNDGW'
-    return {k:list(v) for k,v in cd.items()}
-
-def crates_test():
-    """
-        [D]
-    [N] [C]
-    [Z] [M] [P]
-     1   2   3
-    """
-    cd = {}
-    cd[1] = 'NZ'
-    cd[2] = 'DCM'
-    cd[3] = 'P'
     return {k: list(v) for k, v in cd.items()}
 
 
 def move_crates(state, moves):
-    moves = [i for i in moves if i]
+    """Move crates one at a time. FIFO semantics
+    """
     for qty, src, dst in moves:
         while qty > 0:
             state[dst] = list(state[src].pop(0)) + state[dst]
-            print(state)
             qty -= 1
 
 
-def report_state(state):
-    return {k:v[0] for k, v in  state.items()}
-
-
-def moves_test():
-    return """move 1 from 2 to 1
-    move 3 from 1 to 3
-    move 2 from 2 to 1
-    move 1 from 1 to 2
+def move_stack(state, moves):
+    """Move crates by stack of crates in one move. FILO semantics
     """
+    for qty, src, dst in moves:
+        state[dst] = state[src][:qty] + state[dst]
+        state[src] = state[src][qty:]
+
+
+def report_state(state):
+    """Report the final string state of the crates
+    """
+    return "".join(v[0] for v in state.values())
+
 
 def parse_move(xs):
     """Move description in the form:  (quantity, source, destination)
-        - move 1 from 1 to 2  ->  (1, 1, 2)
     """
     return [int(i) for i in repat.findall(xs)]
 
 
 def parse_moves(xs):
-    #return [parse_move(i) for i in xs.split("\n")]
-    return [parse_move(i) for i in xs]
+    moves = [parse_move(i) for i in xs]
+    return [i for i in moves if i]
+
 
 if __name__ == "__main__":
     moves = get_data("input/day5_input.txt")[9:]
     m = parse_moves(moves)
-    s = crates()
-    move_crates(s, m)
-    print("".join(report_state(s).values()))
 
+    for apply in [move_crates, move_stack]:
+        s = crates()
+        apply(s, m)
+        print(f"{apply.__name__}:", report_state(s))
