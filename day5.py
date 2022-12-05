@@ -16,6 +16,8 @@ def get_data(fname):
         return fptr.read().split("\n")[:-1]
 
 def parse(xss):
+    """parent config parser
+    """
     init, instructions = xss[:9], xss[9:]
     return parse_state(init), parse_moves(instructions)
 
