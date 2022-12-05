@@ -3,11 +3,13 @@
 """ AOC 2022
 """
 
+
 def get_data(fname):
     """Get data from file
     """
     with open(fname, encoding='utf-8') as fptr:
         return fptr.read().split("\n")
+
 
 def decode(css):
     """decode opponent + outcome
@@ -26,6 +28,7 @@ def decode(css):
         case "C Z": scr = 7  # scissor, win -> rock -> 6 + 1
         case _: scr = 0
     return scr
+
 
 def score(css):
     """Scope match with stratgy
