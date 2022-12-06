@@ -3,18 +3,25 @@
 """Advent of Code - Day 6
 """
 
+
 def get_data(fname):
     """Get data from text file
     """
     with open(fname, encoding="utf-8") as fptr:
-        return fptr.readlines()
+        return fptr.read()
+
+
+def uniq(xss):
+    """return unique keys as string
+    """
+    return "".join({k: 1 for k in xss}.keys())
 
 
 def start_detect(xss, num):
     """Detect unique character start sequence, num character long.
     """
     idx = 0
-    while len(set(xss[idx:idx+num])) != len(xss[idx:idx+num]):
+    while uniq(xss[idx:idx+num]) != xss[idx:idx+num]:
         idx += 1
     return idx + num
 
@@ -22,5 +29,5 @@ def start_detect(xss, num):
 if __name__ == "__main__":
 
     vals = get_data("input/day6_input.txt")
-    _ = [print(start_detect(i, 4)) for i in vals]
-    _ = [print(start_detect(i, 14)) for i in vals]
+    print(start_detect(vals, 4))
+    print(start_detect(vals, 14))
